@@ -12,6 +12,8 @@ function CCLEHybridCapture(MAFFile, LineFile, OutputFile)
 %						Capture.Mutations - MxN binary matrix indicating mutations (1 --> mutated)
 %						Capture.Symbols - M-length cell array of strings describing gene symbols 
 %											from hybrid capture platform.
+%                       Capture.Labels - MxN cell array contaning the type
+%                       of mutation for each gene in each cell line
 
 %load CCLE descriptions
 Descriptions = text2cell(MAFFile, '\t');
@@ -41,6 +43,10 @@ CaptureMAF([false; Silent],:) = [];
 
 %fill in tables
 CaptureMutations = zeros(length(Symbols), length(Lines));
+Mutation_Labels = cell(1,length(Lines));
+no_capture = {'no_capture'};
+nocapture_marker = repmat(no_capture,length(Symbols),1);
+
 for i = 1:length(Lines)
     if(strcmp(Capture{i}, 'yes'))
         muts_type = VariantClass;
@@ -49,17 +55,26 @@ for i = 1:length(Lines)
         muts_type = muts_type(Hits);
         muts_value = zeros(size(muts_type));
         
+        z = {''};
+        muts_type_label = repmat(z,size(muts_type));
+        muts_marker = repmat(z,length(Symbols),1);
+        
         for j= 1:length(muts_value)
             if(strcmp(muts_type{j},'Frame_Shift_Del') || strcmp(muts_type{j}, 'Frame_Shift_Ins') || strcmp(muts_type{j}, 'Nonsense_Mutation'))
                 muts_value(j) = 1;
+                muts_type_label{j} = muts_type{j};
             end
         end
         
         Mapping = StringMatch(HitSymbols, Symbols);
         indx = cell2mat(Mapping)';
         CaptureMutations(indx,i) = muts_value;
+        
+        muts_marker(indx) = muts_type_label;
+        Mutation_Labels{i} = muts_marker;
     else
         CaptureMutations(:, i) = NaN;
+        Mutation_Labels{i} = nocapture_marker;
     end
 end
 
@@ -68,6 +83,7 @@ Capture.Lines = Lines;
 Capture.Lineage = Lineage;
 Capture.Mutations = CaptureMutations;
 Capture.Symbols = Symbols;
+Capture.Labels = Mutation_Labels;
 
 %save tables
 save(OutputFile, 'Capture');
