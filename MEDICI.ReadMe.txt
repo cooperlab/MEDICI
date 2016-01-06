@@ -1,0 +1,71 @@
+MEDICI Documentation (Contact: lee.cooper@emory.edu)
+
+Mining Essentiality Data to Identify Critical Interactions (MEDICI) is a method to identify essential 
+protein-protein interactions in cancer. This documentation describes the software available in the MEDICI
+Github repository (https://github.com/cooperlab)
+
+If you find this code useful, please cite our paper ()
+
+PAPER CITATION HERE
+
+** Overview ******************************************************************************
+
+MEDICI integrates pathway models and gene essentiality data to understand which network interactions 
+are critical for the proliferation of cancer cells. Interactions such as MDM2/TP53 are gaining attention 
+as potential targets for cancer therapy, as they present a highly specific means to interrupt oncogenic
+activity that results from genetic alterations. Despite the significance of network interactions, there 
+are currently no high-throughput experimental platforms to interrogate the essentiality of individual 
+protein-protein interactions (PPIs). MEDICI aims to provide predictions of the essentiality of network 
+interactions to aid in prioritizing them as potential therapeutic targets.
+
+MEDICI is written in Matlab, and consists of several collections of modules that implement the following 
+functionality:
+
+-Superpathway Generation - creating a large topological model of network interactions from smaller pathways
+-Generating Gene-Centric Essentialities - aggregating RNAi data from multiple probes into gene-centric 
+											essentiality scores.
+-Interaction Essentiality Inference - combining gene-centric essentialities with superpathway models
+										to infer the essentialities of individual interactions.
+-Correlative Analysis - data mining to identify associations between interaction essentialities,
+						drug sensitivities, and genetic alterations
+- Cytoscape Visualization - Cytoscape visualization of gene and interaction essentialies
+
+** Running MEDICI ************************************************************************
+
+1. Generate Superpathway Model
+	
+	Generate a generic, baseline superpathway model. This model will be tuned for each cell line based 
+	on it's genetic alterations extracted in step 3.
+	
+	Run GenerateSuperPathway.m providing the pathway and filenames of the pathway gene symbols,
+	symbol interactions, pathway inclusion list, HUGO database file, PPI screening file (optional).
+	
+2. Generate Gene-Centric Essentiality Scores
+
+	Transform RNAi screening results into gene-centric essentiality scores that will be used for interaction 
+	essentiality prediction.
+	
+	Run GeneCentricEssentiality.m providing the RNAi GCT file, the cell line description file, 
+	HUGO database file, number of permutations for estimating score null distributions, and 
+	an optional file containing pre-computed null models (to cut down on computation time).
+
+3. Extract Cell-Line Genetic Profiles
+
+	Extract mutations and copy-number variations from Cancer Cell Line Encyclopedia data to
+	build context-specific superpathways for each cell line.
+	
+	Run CCLEBuildCNV.m and CCLEHybridCapture.m providing the CNV text file and hybrid capture MAF.
+
+SAHAR - EDIT BELOW
+
+4. Prediction of Interaction Essentialities
+
+
+5. Correlative Analysis
+
+6. Generate Cytoscape Visualization Tables
+
+	Run GenerateCytoscape.m to create a Cytoscape edge and node table for each cell line.
+	Provide a link to a list of oncogenes and tumor suppressors to enhance the visualization.
+	A Cytoscape .xml style file is provided that defines a style encoding interaction essentialities,
+	gene essentialities, and oncogene / tumor suppressor status into the visualization.
