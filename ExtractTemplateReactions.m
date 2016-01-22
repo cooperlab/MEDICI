@@ -1,7 +1,7 @@
 function  ExtractTemplateReactions(Superpathway_HGNC_EntrezFile,HUGOFile,Output )
 
 % Superpathway_HGNC_EntrezFile ='Superpathway.HGNC-Entrez.xlsx';
-[num,txt,raw] = xlsread(Superpathway_HGNC-EntrezFile,1,'I2:T15716');
+[num,txt,raw] = xlsread(Superpathway_HGNC_EntrezFile,1,'I2:T15716');
 text = txt(:,[1 4 12]);
 
 TargetType = text(:,2);
