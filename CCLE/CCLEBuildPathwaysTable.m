@@ -1,4 +1,4 @@
-function PathwaysTable = CCLEBuildPathwaysTable(superpathwayFile,CNFile,CaptureFile, Output)
+function PathwaysTable = CCLEBuildPathwaysTable(SuperpathwayFile,CNFile,CaptureFile, Output)
 %Builds context specific pathway for each cell line according to the
 %mutaions and copy number values. 
 %inputs:
@@ -17,8 +17,9 @@ function PathwaysTable = CCLEBuildPathwaysTable(superpathwayFile,CNFile,CaptureF
 %                       in each cell line.
 %   PathwaysTable.Values - an MxN matrix indicating whether a gene exists
 %   in a cell line(0) or not(NaN)
-%               
-load(superpathwayFile)
+%  
+             
+load(SuperpathwayFile)
 
 load(CNFile)
 cn_lines = CN.Lines';

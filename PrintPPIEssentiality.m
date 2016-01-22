@@ -12,10 +12,11 @@ function Table = PrintPPIEssentiality(Essentialities, Source, Target,...
 %        novel.
 %Pathways - M-length cell array of strings containing comma-separated 
 %           sub-pathways where each interaction is found.
-%Lines - N-length cell array 
+%Lines - N-length cell array of strings describing cell line name identifiers.
+%Histology - N-length cell array of strings containing cell line histology identifiers.
 %outputs:
-%Contents - M+2 x N+4 cell array of strings that can be written to disk
-%           using cell2text.m.
+%Table - M+2 x N+4 cell array of strings that can be written to disk
+%           using PrintTable.m.
 
 %get dimensions of input 'Essentialities'
 M = length(Source); %number of PPIs
@@ -36,10 +37,6 @@ Table(3:end, 4) = Pathways;
 Table(1, 5:end) = Lines;
 Table(2, 5:end) = Histology;
 
-%convert essentialities to strings
-% Table(3:end, 5:end) = cellfun(@(x)sprintf('%g', x),...
-%                          num2cell(Essentialities), 'UniformOutput', false);
-
 essen = cell(M,N);
 for i=1:M
     
@@ -49,7 +46,6 @@ for i=1:M
 end
 
 Table(3:end, 5:end) = essen;
-
 
 end
 

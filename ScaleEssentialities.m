@@ -1,4 +1,12 @@
-function ScaleEssentialities(EssentialitiesFile,Output)
+function ScaleEssentialities(EssentialitiesFile, Output)
+%Normalizes interaction essentiality values by scaling to preserve significance of positive
+%and negative signs on values from gene essentiality experiments. A negative gene essentiality
+%indicates a gene that inhibits proliferation when silenced - measured as the fluorescence
+%readout of the cells log(after / before) silencing.
+%inputs:
+%EssentialitiesFile - filename and path of the 
+%Output - desired filename and path for generating the scaled essentialities file that will
+%			be consumed by PrintTable.
 
 load(EssentialitiesFile);
 Essens = E.Values;
@@ -21,5 +29,6 @@ Essentialities.Source = E.Source;
 Essentialities.Target = E.Target;
 
 save(Output,Essentialities)
+
 end
 

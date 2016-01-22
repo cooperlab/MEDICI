@@ -1,18 +1,27 @@
-function E = CalculateEssentialities(superpathwayFile,PathwaysTableFile,GeneEssentialitiesFile,TemplateReactionFile,alpha,w, Output)
+function E = CalculateEssentialities(SuperpathwayFile, PathwaysTableFile, GeneEssentialitiesFile, TemplateReactionFile, alpha, w, Output)
 %Builds context specific pathway for each cell line according to the
 %mutaions and copy number values. 
 %inputs:
-%superpathwayFile - filename and path to superpathway file containing
+%SuperpathwayFile - filename and path to superpathway file containing
 %                   Sources and Targets of interactions.
-%CNFile - filename and path to CN file which is the output file of the 
-%         'CCLEBuildCNV.m' function. 
-%CaptureFile - filename and path to the CaptureFile which is the output of
-%              the 'CCLEHybridCapture.m'             
-%Output - filename and path to store output variables.
-%outputs
-%A structure 'PathwaysTab
+%PathwaysTableFile - .
+%GeneEssentialitiesFile - .
+%TemplateReactionFile - .
+%alpha - scalar, smoothing parameter used to weight nieghboring essentialities for 
+%		each network node when estimating interaction essentialities. A value of '0' means
+%		that each node should be handled independently of its neighbors.
+%w - scalar, weighting parameter for network inversion. Used to weight gene essentialities
+%	 to initialize interaction essentialities when the network is inverted.
+%Output - filename and path to store a structure containing output variables.
+%						This structure contains the following:
+%						Values - 
+%						Lines - 
+%						Histology - 
+%						Labels - 
+%						Source - 
+%						Target - 
 
-load(superpathwayFile)
+load(SuperpathwayFile);
 
 load(PathwaysTableFile)
 % load('SuperPathways_v2.mat') %% load pathway(7906*1016) SuperPathway_Lines(1016)
@@ -26,14 +35,7 @@ load('Histology')
 histology = Histology;
 hist_lines = Lines;
 
-% load('CCLE.CopyNumber.mat')
-% load('CCLE.CopyNumber.mat', 'CN') %% load variable CN (23316(genes)*1043(Lines))
-
-
-% load('FullSuperpathway.strict.mat') %% load Proteins(1726) Source(7906) Target(7906) Adjacency(1726*2726) Connectivity(1726*7906)
-
 load(GeneEssentialitiesFile)
-% load('Achilles.mat') %% load Lines(216) ScoreSecond(12066*216)
 ach_Lines = Lines;
 scores = ScoresSecond;
 
@@ -47,20 +49,12 @@ path_unmapped_cellLines = find(~ismember(path_Lines,ach_Lines));
 path_Lines(path_unmapped_cellLines) = [];
 path_Values(:,path_unmapped_cellLines) = [];
 path_Labels(:,path_unmapped_cellLines) = [];
-%mutation.labels(path_unmapped_cellLines) = [];
-%CopyNumber.labels(path_unmapped_cellLines) = [];
-
-
-% hist_unmapped_cellLines = find(~ismember(hist_lines,path_Lines));
-% hist_lines(hist_unmapped_cellLines) = [];
-% histology(hist_unmapped_cellLines) = [];
 
 % Map cell lines in both dataset
 Mapping = StringMatch(path_Lines,ach_Lines);
 mapping = cell2mat(Mapping)';
 path_Values(:,mapping) = path_Values;
 path_Labels(:,mapping) = path_Labels;
-%path_Lines(mapping) = path_Lines;
 
 %% Calculation part
 [G,N] = size(path_Values);
@@ -80,17 +74,12 @@ for i = 1:N
     Essentialities(:,i) = path_Values(:,i);
     
     connectivity = new_connectivity;
-%     adjacency = new_adjacency;
-    
+        
     %Remove unavailable interactions in the pathway
     deleted_edge = find(isnan(path_Values(:,i)));
-%     deleted_source = p_sources(deleted_edge);
-%     deleted_target = p_targets(deleted_edge);
     p_sources(deleted_edge) = [];
     p_targets(deleted_edge) = [];
     connectivity(:,deleted_edge) = [];
-
-    
     
     % Remove proteins which are not in Achilles
     ach_symbols = UniqueSymbols;
@@ -103,29 +92,24 @@ for i = 1:N
     Unmapped_ach = find(c_scores(:,i)==0);
     ach_symbols(Unmapped_ach) = [];
     c_scores(Unmapped_ach,:) = [];
-    
-    
+     
     %Find proteins with zero score in protien list to remove
     Unmapped_prot = find(~ismember(proteins,ach_symbols));
+    
     %Find corresponding interactions
     unmapped_edges = find(cellfun(@(x)sum(strcmp(x, proteins(Unmapped_prot))),p_sources).' | cellfun(@(x)sum(strcmp(x,proteins(Unmapped_prot) )), p_targets).');
     p_sources(unmapped_edges) = [];
     p_targets(unmapped_edges) = [];
     proteins(Unmapped_prot) = [];
     connectivity(Unmapped_prot, :) = [];
-%     adjacency(Unmapped_prot, :) = [];
-%     adjacency(:,Unmapped_prot) = [];
+    
     %Remove proteins and interactions from the network
     connectivity(:,unmapped_edges) = [];
-    
     
     Mapping = StringMatch(ach_symbols,proteins);
     mapping = cell2mat(Mapping)';
     c_c_scores = zeros(size(c_scores));
-%     c_ach_symbols= ach_symbols;
-    c_c_scores(mapping,:) = c_scores;
-%     c_ach_symbols(mapping) = ach_symbols;
-    
+    c_c_scores(mapping,:) = c_scores;    
     y = c_c_scores(:,i);
     y = - log10(y);
     

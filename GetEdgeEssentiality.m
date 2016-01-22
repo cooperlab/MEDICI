@@ -1,13 +1,23 @@
 function [ edge_essen ] = GetEdgeEssentiality(connectivity, y, alpha, w)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+%This function computes edge essentialities using network inversion. Given the gene-centric
+%essentialities 'y', and the network topology 'connectivity', the interaction essentialities
+%are estimated using 
+%inputs:
+%connectivity - .
+%y - .
+%alpha - scalar, smoothing parameter used to weight nieghboring essentialities for 
+%		each network node when estimating interaction essentialities. A value of '0' means
+%		that each node should be handled independently of its neighbors.
+%w - scalar, weighting parameter for network inversion. Used to weight gene essentialities
+%	 to initialize interaction essentialities when the network is inverted.
+%outputs:
+%edge_essen - .
+
 inds = find(sum(connectivity,2) > 0);
 C = connectivity(inds, :);
 y = y(inds);
 
 m = size(C,2);
-%w = 0.5;
-
 
 graph_edges= zeros(m,2);
 for i=1:m
@@ -47,13 +57,6 @@ new_inds = large_con==cc;
 GX = diag(1./sum(G))*G;
 D = diag(sum(GX,2));
 GN = alpha*GX + (1-alpha)*D;
-
-
-% X = GN;
-% for j=1:1
-%     X = X*X;
-% end
-% vec = X(1,:)';
 
 
 [vv,~] = eigs(GN',1);

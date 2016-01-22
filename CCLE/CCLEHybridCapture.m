@@ -16,7 +16,7 @@ function CCLEHybridCapture(MAFFile, LineFile, OutputFile)
 %                       of mutation for each gene in each cell line
 
 %load CCLE descriptions
-Descriptions = text2cell(MAFFile, '\t');
+Descriptions = text2cell(LineFile, '\t');
 
 %get cell line names, determine hybrid sequence status
 Lines = Descriptions(2:end, find(strcmp(Descriptions(1,:), 'CCLE name')));
