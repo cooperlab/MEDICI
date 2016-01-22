@@ -134,13 +134,24 @@ for i = 1:N
     Essentialities(mapped_edges,i) = edge_essens{i};   
 end
 
-E.Values = Essentialities;
-E.Lines = ach_Lines;
-E.Histology = histology;
-E.Labels = path_Labels;
-E.Source = Source;
-E.Target = Target;
+Essens = abs(Essentialities);
+clear Essentialities; 
 
-save (Output,E)
+for i=1:size(Essens,2)
+    temp = Essens(:,i);
+    temp(find(isnan(temp)))=[];
+    %temp(find(temp==0))=[];
+    temp = abs(temp);
+    Essens(:,i) = abs(Essens(:,i));
+    Essens(:,i) = (Essens(:,i)-min(temp))/(max(temp)-min(temp));
+end
 
+Essentialities.Values = Essens;
+Essentialities.Lines = ach_Lines;
+Essentialities.Histology = histology;
+Essentialities.Labels = path_Labels;
+Essentialities.Source = Source;
+Essentialities.Target = Target;
+
+save(Output,Essentialities)
 end
