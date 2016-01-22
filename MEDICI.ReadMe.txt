@@ -59,9 +59,19 @@ functionality:
 SAHAR - EDIT BELOW
 
 4. Prediction of Interaction Essentialities
+	
+	Run CalculateEssentialities.m providing the context-specific superpathways, Gene-Centric Essentiality Scores,
+	Template Reactions, and parameters alpha and w.
+	
+	Run ScaleEssentialities.m providing the predicted essentialities.
+	
+	Run PrintTable.m providing Superpathway, Scaled Essentialies.
 
 
 5. Correlative Analysis
+
+	Run SensitivityAnalysis.m providing Scaled Essentilities and Drug Responds to generate the table of the correlations
+	between PPI essentialities and drug sensitivities.
 
 6. Generate Cytoscape Visualization Tables
 
