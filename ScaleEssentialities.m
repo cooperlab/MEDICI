@@ -1,4 +1,4 @@
-function Scale_Essentialities(EssentialitiesFile,Output)
+function ScaleEssentialities(EssentialitiesFile,Output)
 
 load(EssentialitiesFile);
 Essens = E.Values;

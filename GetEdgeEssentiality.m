@@ -1,4 +1,4 @@
-function [ edge_essen ] = get_edge_essen( connectivity,y,alpha,w )
+function [ edge_essen ] = GetEdgeEssentiality(connectivity, y, alpha, w)
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 inds = find(sum(connectivity,2) > 0);

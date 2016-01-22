@@ -140,7 +140,7 @@ for i = 1:N
     connectivity(:,unmapped_edges) = [];
     
     %Calculate essentialities
-    edge_essens{i} = get_edge_essen( connectivity,y,alpha,w);
+    edge_essens{i} = GetEdgeEssentiality( connectivity,y,alpha,w);
   
     all_interactions = strcat(Source,Target);
     p_interactions = strcat(p_sources,p_targets);
