@@ -29,7 +29,7 @@ Lineage(Hits) = cellfun(@(x,y)[x '.' y], Lineage(Hits), HistSubtype(Hits),...
                     'UniformOutput', false);
 
 %read in .maf file
-CaptureMAF = text2cell('CCLE_hybrid_capture1650_hg19_damaging.maf', '\t');
+CaptureMAF = text2cell(MAFFile, '\t');
 MutatedLines = CaptureMAF(2:end, find(strcmp(CaptureMAF(1,:), 'Tumor_Sample_Barcode')));
 Mutations = CaptureMAF(2:end, find(strcmp(CaptureMAF(1,:), 'Hugo_Symbol')));
 
