@@ -1,25 +1,35 @@
-function E = CalculateEssentialities(SuperpathwayFile, PathwaysTableFile, GeneEssentialitiesFile, TemplateReactionFile, alpha, w, Output)
-%Builds context specific pathway for each cell line according to the
-%mutaions and copy number values. 
+function Essentialities = CalculateEssentialities(SuperpathwayFile, PathwaysTableFile, GeneEssentialitiesFile, TemplateReactionFile, alpha, w, Output)
+%Calculates PPIs essentialities in each cell line 
 %inputs:
 %SuperpathwayFile - filename and path to superpathway file containing
 %                   Sources and Targets of interactions.
-%PathwaysTableFile - .
-%GeneEssentialitiesFile - .
-%TemplateReactionFile - .
+%PathwaysTableFile - filename and path to the file containing context 
+%                    specific pathways which is the output of the
+%                    CCLEBuildPathwaysTable.m
+%GeneEssentialitiesFile - filename and path to the file contating 
+%                         gene-centric essentiality values.
+%TemplateReactionFile - filename and path to the file containing
+%                       interactions that appear only with the TargetType 
+%                       as TemplateReaction.
 %alpha - scalar, smoothing parameter used to weight nieghboring essentialities for 
 %		each network node when estimating interaction essentialities. A value of '0' means
 %		that each node should be handled independently of its neighbors.
-%w - scalar, weighting parameter for network inversion. Used to weight gene essentialities
-%	 to initialize interaction essentialities when the network is inverted.
+%w - scalar, weighting parameter for network inversion. w represents how 
+%       much the essentiality of proteins affects the essentiality of interactions
+%       in between. Larger values of w show that an interaction is essential 
+%       if the corresponding proteins are essential, and smaller values of w show 
+%       that no matter how essential the corresponding proteins are the
+%       interaction is important.
 %Output - filename and path to store a structure containing output variables.
 %						This structure contains the following:
-%						Values - 
-%						Lines - 
-%						Histology - 
-%						Labels - 
-%						Source - 
-%						Target - 
+%						Values - PPI esseantialitiy scores
+%						Lines - Cell lines name
+%						Histology - histology
+%						Labels - Type of genetic alterations
+%						Source - Names of proteins in one side of
+%						ineractions
+%						Target - Names of proteins in another side of
+%						interactions
 
 load(SuperpathwayFile);
 

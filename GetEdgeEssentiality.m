@@ -3,15 +3,23 @@ function [ edge_essen ] = GetEdgeEssentiality(connectivity, y, alpha, w)
 %essentialities 'y', and the network topology 'connectivity', the interaction essentialities
 %are estimated using 
 %inputs:
-%connectivity - .
-%y - .
+%connectivity - connectivity matrix is an N x M incidence matrix where
+%               N and M are the numbers of edges and vertices 
+%               respectively, such that connectivity(i,j) = 1 if the 
+%               edge ei and vertex vj are incident and 0 otherwise.
+%y - a vector of size M representing essentialities of M genes(proteins) 
 %alpha - scalar, smoothing parameter used to weight nieghboring essentialities for 
 %		each network node when estimating interaction essentialities. A value of '0' means
 %		that each node should be handled independently of its neighbors.
-%w - scalar, weighting parameter for network inversion. Used to weight gene essentialities
-%	 to initialize interaction essentialities when the network is inverted.
+%w - scalar, weighting parameter for network inversion. w represents how 
+%       much the essentiality of proteins affects the essentiality of interactions
+%       in between. Larger values of w show that an interaction is essential 
+%       if the corresponding proteins are essential, and smaller values of w show 
+%       that no matter how essential the corresponding proteins are the
+%       interaction is important.
 %outputs:
-%edge_essen - .
+%edge_essen - a vector of size N indicating essentialities of N
+%             interactions of M proteins.
 
 inds = find(sum(connectivity,2) > 0);
 C = connectivity(inds, :);
