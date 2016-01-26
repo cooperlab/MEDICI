@@ -20,7 +20,7 @@ Descriptions = text2cell(LineFile, '\t');
 
 %get cell line names, determine hybrid sequence status
 Lines = Descriptions(2:end, find(strcmp(Descriptions(1,:), 'CCLE name')));
-Capture = Descriptions(2:end, find(strcmp(Descriptions(1,:), 'Hybrid Capture Sequencing')));
+Captures = Descriptions(2:end, find(strcmp(Descriptions(1,:), 'Hybrid Capture Sequencing')));
 Lineage = Descriptions(2:end, find(strcmp(Descriptions(1,:), 'Site Primary')));
 Histology = Descriptions(2:end, find(strcmp(Descriptions(1,:), 'Histology')));
 HistSubtype = Descriptions(2:end, find(strcmp(Descriptions(1,:), 'Hist Subtype1')));
@@ -48,7 +48,7 @@ no_capture = {'no_capture'};
 nocapture_marker = repmat(no_capture,length(Symbols),1);
 
 for i = 1:length(Lines)
-    if(strcmp(Capture{i}, 'yes'))
+    if(strcmp(Captures{i}, 'yes'))
         muts_type = VariantClass;
         Hits = find(strcmp(MutatedLines, Lines{i}));
         HitSymbols = Mutations(Hits);
@@ -84,6 +84,7 @@ Capture.Lineage = Lineage;
 Capture.Mutations = CaptureMutations;
 Capture.Symbols = Symbols;
 Capture.Labels = Mutation_Labels;
+Capture.Histology = Histology;
 
 %save tables
 save(OutputFile, 'Capture');
