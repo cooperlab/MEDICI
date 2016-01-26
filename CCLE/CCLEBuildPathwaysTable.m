@@ -82,44 +82,44 @@ pathway = zeros(length(Source),length(lines));
 
 labels = cell(length(Source),length(lines));
 
-for k = 1:length(lines)
-    k
-    for j = 1:length(Source)
-        j
-        [~, ind_1] = ismember(Source{j}, mut_genes);
-        s_m = '';
-        if (ind_1 ~= 0)
-            s_m = mutation_labels{k}{ind_1};
-        end
-        [~, ind_2] = ismember(Source{j}, cn_genes);
-        s_cn = '';
-        if (ind_2 ~= 0)
-            s_cn = cn_labels{k}{ind_2};
-        end
-        s = strcat(s_m,s_cn);
-        s1 = '';
-        if(~isempty(s))
-            s1 = strcat('Source:',s);
-        end
-        [~, ind_1] = ismember(Target{j}, mut_genes);
-        t_m = '';
-        if (ind_1~=0)
-            t_m = mutation_labels{k}{ind_1};
-        end
-        [~, ind_2] = ismember(Target{j}, cn_genes);
-        t_cn = '';
-        if (ind_2~=0)
-            t_cn = cn_labels{k}{ind_2};
-        end
-        s = strcat(t_m,t_cn);
-        s2 = '';
-        if(~isempty(s))
-            s2 = strcat('Target:',s);
-        end
-        s = strcat(s1,s2);
-        labels{j}{k} = {s};
-    end
-end
+% for k = 1:length(lines)
+%     k
+%     for j = 1:length(Source)
+%         j
+%         [~, ind_1] = ismember(Source{j}, mut_genes);
+%         s_m = '';
+%         if (ind_1 ~= 0)
+%             s_m = mutation_labels{k}{ind_1};
+%         end
+%         [~, ind_2] = ismember(Source{j}, cn_genes);
+%         s_cn = '';
+%         if (ind_2 ~= 0)
+%             s_cn = cn_labels{k}{ind_2};
+%         end
+%         s = strcat(s_m,s_cn);
+%         s1 = '';
+%         if(~isempty(s))
+%             s1 = strcat('Source:',s);
+%         end
+%         [~, ind_1] = ismember(Target{j}, mut_genes);
+%         t_m = '';
+%         if (ind_1~=0)
+%             t_m = mutation_labels{k}{ind_1};
+%         end
+%         [~, ind_2] = ismember(Target{j}, cn_genes);
+%         t_cn = '';
+%         if (ind_2~=0)
+%             t_cn = cn_labels{k}{ind_2};
+%         end
+%         s = strcat(t_m,t_cn);
+%         s2 = '';
+%         if(~isempty(s))
+%             s2 = strcat('Target:',s);
+%         end
+%         s = strcat(s1,s2);
+%         labels{j}{k} = {s};
+%     end
+% end
 
 for i = 1:length(lines)
     Mapping = StringMatch(Source,gene_set);
@@ -142,7 +142,7 @@ end
 
 PathwaysTable.Lines = lines;
 PathwaysTable.Labels = labels;
-PathwaysTable.Values = value;
+PathwaysTable.Values = pathway;
 
 %save data
 save(Output, 'PathwaysTable');
