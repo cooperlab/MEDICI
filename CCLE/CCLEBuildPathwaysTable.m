@@ -83,7 +83,9 @@ pathway = zeros(length(Source),length(lines));
 labels = cell(length(Source),length(lines));
 
 for k = 1:length(lines)
+    k
     for j = 1:length(Source)
+        j
         [~, ind_1] = ismember(Source{j}, mut_genes);
         s_m = '';
         if (ind_1 ~= 0)
