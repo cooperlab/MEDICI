@@ -38,12 +38,10 @@ load(PathwaysTableFile)
 path_Lines = PathwaysTable.Lines;
 path_Labels = PathwaysTable.Labels;
 path_Values = PathwaysTable.Values;
+histology = PathwaysTable.Histology;
 
 load(TemplateReactionFile) % load template reactions source target
 
-load('Histology')
-histology = Histology;
-hist_lines = Lines;
 
 load(GeneEssentialitiesFile)
 ach_Lines = Lines;
@@ -57,6 +55,7 @@ ach_Lines(ach_unmapped_cellLines) = [];
 %Remove cell lines in PathwaysTableFile which are not in GeneEssentialitiesFile
 path_unmapped_cellLines = find(~ismember(path_Lines,ach_Lines));
 path_Lines(path_unmapped_cellLines) = [];
+histology(path_unmapped_cellLines) = [];
 path_Values(:,path_unmapped_cellLines) = [];
 path_Labels(:,path_unmapped_cellLines) = [];
 

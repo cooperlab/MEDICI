@@ -30,6 +30,7 @@ load(CaptureFile)
 mut_lines = Capture.Lines;
 mutations = Capture.Mutations;
 mutation_labels = Capture.Labels;
+histology = Capture.Histology;
 
 gene_set = union(CN.Symbols,Capture.Symbols);
 mut_genes = Capture.Symbols; 
@@ -42,6 +43,7 @@ cn_labels(:,unmapped_cellLines) = [];
 
 unmapped_cellLines = ~ismember(mut_lines,cn_lines);
 mut_lines(unmapped_cellLines) = [];
+histology(unmapped_cellLines) = [];
 mutations(:,unmapped_cellLines) = [];
 mutation_labels(:,unmapped_cellLines) = []; 
 mutations(isnan(mutations)) = 1;
@@ -143,6 +145,7 @@ end
 PathwaysTable.Lines = lines;
 PathwaysTable.Labels = labels;
 PathwaysTable.Values = pathway;
+PathwaysTable.Histology = histology;
 
 %save data
 save(Output, 'PathwaysTable');
