@@ -51,4 +51,4 @@ CN.Labels = Labels;
 
 
 %save data
-save(Output, 'CN');
+save(Output, 'CN','-v7.3');
