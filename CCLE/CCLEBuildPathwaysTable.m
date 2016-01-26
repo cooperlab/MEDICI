@@ -31,7 +31,7 @@ mut_lines = Capture.Lines;
 mutations = Capture.Mutations;
 mutation_labels = Capture.Labels;
 
-gene_set = union(Symbols,Capture.Symbols);
+gene_set = union(CN.Symbols,Capture.Symbols);
 mut_genes = Capture.Symbols; 
 cn_genes = CN.Symbols; 
 
