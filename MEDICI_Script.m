@@ -18,11 +18,12 @@ Scaled_EssentialiesFile = './Data/Scaled_Essentialities.mat';
 Final_EssentialiesFile = './Data/Final_Essentialies.mat';
 
 GCTFile = './Data/Achilles.QCv2.4.3.rnai.gct';
+CellDescriptionFile = './Data/Achilles.CellLineData.txt';
+ESNullFile = './Data/ES.NullValues.mat';
+
 
 
 TemplateReactionFile = './Data/TemplateReaction.mat';
-CellDescriptionFile = './Data/Achilles.CellLineData.txt';
-ESNullFile = './Data/ES.NullValues.mat';
 
 
 
@@ -40,7 +41,7 @@ GenerateSuperpathway(SymbolFile, InteractionFile, PathwayListFile, ...
 PathwaysTable = CCLEBuildPathwaysTable(superpathwayFile,CNOutputFile,...
     CaptureOutputFile, PathwaysTableFile);
 
-GeneCentricEssentiality(GCTFile, CellDescriptionFile, HUGOFile, B, ESNullFile, GeneEssentialitiesFile)
+GeneCentricEssentiality(GCTFile, CellDescriptionFile, HUGOFile, [], ESNullFile, GeneEssentialitiesFile)
 
 E = CalculateEssentialities(superpathwayFile,PathwaysTableFile,...
     GeneEssentialitiesFile,TemplateReactionFile,alpha,w, EssentialiesFile);
