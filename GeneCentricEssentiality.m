@@ -59,46 +59,6 @@ Mapping = StringMatch(Lines, Contents(2:end, NameCol));
 Histology = cell(size(Lines));
 Histology(~cellfun(@isempty, Mapping)) = Strings([Mapping{:}]);
 
-%calculate scores using top ranking shRNA (most lethal) %%%%%%%%%%%%%%%%%%%
-
-%sort for each gene and each cell line
-ScoresMax = zeros(length(UniqueSymbols), size(Scores,2));
-for i = 1:length(UniqueSymbols)
-    List = Correspondence == i;
-    ScoresMax(i,:) = min(Scores(List,:), [], 1);
-end
-
-
-%calculate scores using second best rank (second most lethal) %%%%%%%%%%%%%
-
-%generate null distribution of second-rank values
-MaxProbes = max(hist(Correspondence, [1:length(UniqueSymbols)])); %find max number of probes
-Null = zeros(B, MaxProbes);
-for i = 1:MaxProbes
-    Indices = ceil(size(Scores,1)*size(Scores,2) * rand(B*i,1));
-    Values = reshape(Scores(Indices), [B i]);
-    if i > 1
-        Values = sort(Values, 2);
-        Null(:,i) = Values(:,2);
-    else
-        Null(:,i) = Values;
-    end
-end
-
-%scan through each gene and each line, calculate p-value for second most
-%lethal shRNA
-ScoresSecond = zeros(length(UniqueSymbols), length(Lines));
-for i = 1:length(UniqueSymbols)
-    List = Correspondence == i; %get indices of shRNAs for gene 'i'
-    N = sum(List); %get number of shRNAs for gene 'i'
-    Sorted = sort(Scores(List,:), 1);
-    Second = Sorted(min(2, N), :);
-    for j = 1:length(Lines)
-        ScoresSecond(i,j) = sum(Null(:,N) <= Second(j)) / B;
-    end
-end
-
-
 %calculate scores using KS statistic of all shRNAs %%%%%%%%%%%%%%%%%%%%%%%%
 
 %generate null distributions of KS statistics for gene sets with varying sizes
@@ -134,6 +94,9 @@ if(~exist(ESNullFile, 'file')) %generate null ES scores for gene sets of size 1:
     save(ESNullFile, 'NullES', 'MaxProbes');
 else
     load(ESNullFile);
+    
+    %capture dimensions 'B'
+    B = size(NullES,1);
 end
 
 %calculate actual enrichment scores using KS of shRNAs corresponding to each gene
@@ -169,6 +132,47 @@ for i = 1:length(UniqueSymbols)
         
     end
 end
+
+%calculate scores using top ranking shRNA (most lethal) %%%%%%%%%%%%%%%%%%%
+
+%sort for each gene and each cell line
+ScoresMax = zeros(length(UniqueSymbols), size(Scores,2));
+for i = 1:length(UniqueSymbols)
+    List = Correspondence == i;
+    ScoresMax(i,:) = min(Scores(List,:), [], 1);
+end
+
+%calculate scores using second best rank (second most lethal) %%%%%%%%%%%%%
+
+%generate null distribution of second-rank values
+MaxProbes = max(hist(Correspondence, [1:length(UniqueSymbols)])); %find max number of probes
+Null = zeros(B, MaxProbes);
+for i = 1:MaxProbes
+    Indices = ceil(size(Scores,1)*size(Scores,2) * rand(B*i,1));
+    Values = reshape(Scores(Indices), [B i]);
+    if i > 1
+        Values = sort(Values, 2);
+        Null(:,i) = Values(:,2);
+    else
+        Null(:,i) = Values;
+    end
+end
+
+%scan through each gene and each line, calculate p-value for second most
+%lethal shRNA
+ScoresSecond = zeros(length(UniqueSymbols), length(Lines));
+for i = 1:length(UniqueSymbols)
+    List = Correspondence == i; %get indices of shRNAs for gene 'i'
+    N = sum(List); %get number of shRNAs for gene 'i'
+    Sorted = sort(Scores(List,:), 1);
+    Second = Sorted(min(2, N), :);
+    for j = 1:length(Lines)
+        ScoresSecond(i,j) = sum(Null(:,N) <= Second(j)) / B;
+    end
+end
+
+
+
 
 %write outputs
 save(OutputFile, 'Probes', 'Symbols', 'UniqueSymbols', 'Correspondence',...
