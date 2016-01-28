@@ -57,13 +57,20 @@ path_unmapped_cellLines = find(~ismember(path_Lines,ach_Lines));
 path_Lines(path_unmapped_cellLines) = [];
 histology(path_unmapped_cellLines) = [];
 path_Values(:,path_unmapped_cellLines) = [];
-path_Labels(:,path_unmapped_cellLines) = [];
+path_Labels(:,2:end) = [];
+for k = 1:size(path_Labels,1)
+    path_Labels{k}(path_unmapped_cellLines) = [];
+end
+% path_Labels(:,path_unmapped_cellLines) = [];
 
 % Map cell lines in both dataset
 Mapping = StringMatch(path_Lines,ach_Lines);
 mapping = cell2mat(Mapping)';
 path_Values(:,mapping) = path_Values;
-path_Labels(:,mapping) = path_Labels;
+for k = 1:size(path_Labels,1)
+    path_Labels{k} = path_Labels{k}(mapping);
+end
+% path_Labels(:,mapping) = path_Labels;
 
 %% Calculation part
 [G,N] = size(path_Values);
@@ -162,5 +169,5 @@ Essentialities.Labels = path_Labels;
 Essentialities.Source = Source;
 Essentialities.Target = Target;
 
-save(Output,Essentialities)
+save(Output,'Essentialities')
 end
