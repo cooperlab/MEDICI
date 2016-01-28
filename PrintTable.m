@@ -18,9 +18,9 @@ Source = Essentialities.Source;
 Target = Essentialities.Target ;
 essen_table = Essentialities.Labels;
 
-for i = 1:size(labels,1)
+for i = 1:size(essen_table,1)
     
-    for j = 1:size(labels,2)
+    for j = 1:size(essen_table{1},2)
         if(~isnan(Essentialities.Values(i,j)))
             essen_table{i}{j} = {num2str(Essentialities.Values(i,j))};
         end
@@ -37,7 +37,7 @@ end
 p = cellfun(@(x)ReLimit(x, ','), Pathways, 'UniformOutput', false);
 
 table = PrintPPIEssentiality(essen_table, Source, Target,...
-                                   p_Novel, p, Lines, Histology );
+                                   p_Novel, p, Essentialities.Lines, Essentialities.Histology );
 result = cell2text(table, Output);
 
 
