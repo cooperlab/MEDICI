@@ -1,3 +1,6 @@
+addpath './CCLE'
+addpath './HUGO'
+addpath './TextUtilities' 
 MAFFile = './Data/CCLE_hybrid_capture1650_hg19_damaging.maf';
 LineFile = './Data/CCLE_sample_info_file_2012-10-18.txt';
 CaptureOutputFile = './Data/CaptureFile.mat';
