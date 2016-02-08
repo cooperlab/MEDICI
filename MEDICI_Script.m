@@ -27,6 +27,9 @@ ESNullFile = './Data/ES.NullValues.mat';
 
 TemplateReactionFile = './Data/TemplateReaction.mat';
 
+DrugResponseFile = './Data/CTRP.DrugResponse.mat';
+DrugSensitivityOutput = './Data/Sensitivity_Essentiality_analysis.txt';
+
 
 
 alpha = 0.5;
@@ -49,6 +52,8 @@ E = CalculateEssentialities(superpathwayFile,PathwaysTableFile,...
     GeneEssentialitiesFile,TemplateReactionFile,alpha,w, EssentialiesFile);
 
 PrintTable(superpathwayFile,EssentialiesFile,Final_EssentialiesFile);
+
+SensitivityAnalysis(EssentialiesFile, DrugResponseFile, DrugSensitivityOutput)
 
 
 

@@ -1,4 +1,4 @@
-function SensitivityAnalysis(ScaledEssenFile, DrugResponseFile, Output)
+function SensitivityAnalysis(EssenFile, DrugResponseFile, Output)
 %Performs an associative analysis between interaction essentialties and drug response 
 %profiles to discover significant relationships between interaction essentiality and drug
 %sensitivity.
@@ -12,15 +12,36 @@ function SensitivityAnalysis(ScaledEssenFile, DrugResponseFile, Output)
 %			in this table each row represents an interaction/drug pair, and the R^2 value, 
 %			p-value and number of cell lines used in the comparison are noted in the columns.
 
-load(ScaledEssenFile);
-lines = Essentialities.Line;
+load(EssenFile);
+lines = Essentialities.Lines;
+ess_values = Essentialities.Values;
 
 load(DrugResponseFile)
 ccle_lines = CCLE.Lines;
+ccle_lines = upper(ccle_lines);
+ccle_AUC = CCLE.AUC;
+
+if (size(ccle_lines,2) == 1)
+    lines = lines';
+end
+
+unmapped_cellLines = ~ismember(lines,ccle_lines);
+lines(unmapped_cellLines) = [];
+ess_values(:,unmapped_cellLines) = [];
+
+unmapped_cellLines = ~ismember(ccle_lines,lines);
+ccle_lines(unmapped_cellLines) = [];
+ccle_AUC(:,unmapped_cellLines) = [];
+
+[un idx_last idx] = unique(ccle_lines(:,1));
+unique_idx = accumarray(idx(:),(1:length(idx))',[],@(x) {sort(x)});
 
 mapped = StringMatch(lines,ccle_lines);
-ccle_AUC = CCLE.AUC(:,cell2mat(mapped));
+ccle_AUC = CCLE.AUC(:,cell2mat(mapped)); 
+ccle_lines = ccle_lines(cell2mat(mapped));
 
+new_ess_values = zeros(size(ess_values,1),length(ccle_lines));
+new_ess_values(:,:) = ess_values(:,idx);
 
 [G,N] = size(Essentialities.Values);
 correl = zeros(G,length(CCLE.Compounds));
@@ -29,7 +50,7 @@ n_cellLines = zeros(G,length(CCLE.Compounds));
 
 for i = 1:G
     for j=1: length(CCLE.Compounds)
-        e = Essentialities.Values(i,:)';
+        e = new_ess_values(i,:)';
         auc = ccle_AUC(j,:)';
         nans = find(isnan(e));
         e(nans) = [];
@@ -45,6 +66,9 @@ for i = 1:G
         n_cellLines(i,j) = length(e);
     end
 end
+
+Target = Essentialities.Target;
+Source = Essentialities.Source;
 
 siz = size(ccle_AUC,1) * length(Target);
 r_n_cellLines = reshape(n_cellLines,[1,siz]);
