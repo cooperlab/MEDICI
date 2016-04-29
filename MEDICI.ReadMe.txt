@@ -2,7 +2,7 @@ MEDICI Documentation (Contact: lee.cooper@emory.edu)
 
 Mining Essentiality Data to Identify Critical Interactions (MEDICI) is a method to identify essential 
 protein-protein interactions in cancer. This documentation describes the software available in the MEDICI
-Github repository (https://github.com/cooperlab)
+Github repository (http://github.com/cooperlab/MEDICI)
 
 If you find this code useful, please cite our paper ()
 
@@ -56,7 +56,6 @@ functionality:
 	
 	Run CCLEBuildCNV.m and CCLEHybridCapture.m providing the CNV text file and hybrid capture MAF.
 
-SAHAR - EDIT BELOW
 
 4. Prediction of Interaction Essentialities
 	
@@ -72,6 +71,7 @@ SAHAR - EDIT BELOW
 
 	Run SensitivityAnalysis.m providing Scaled Essentilities and Drug Responds to generate the table of the correlations
 	between PPI essentialities and drug sensitivities.
+	
 
 6. Generate Cytoscape Visualization Tables
 
