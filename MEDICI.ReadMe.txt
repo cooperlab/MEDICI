@@ -4,9 +4,8 @@ Mining Essentiality Data to Identify Critical Interactions (MEDICI) is a method 
 protein-protein interactions in cancer. This documentation describes the software available in the MEDICI
 Github repository (http://github.com/cooperlab/MEDICI)
 
-If you find this code useful, please cite our paper ()
-
-PAPER CITATION HERE
+If you find this code useful, please cite our paper:
+Harati S, Cooper LAD, Moran JD, Giuste FO, Du Y, Ivanov AA, et al. (2017) MEDICI: Mining Essentiality Data to Identify Critical Interactions for Cancer Drug Target Discovery and Development. PLoS ONE 12(1): e0170339. doi:10.1371/journal.pone.0170339
 
 ** Overview ******************************************************************************
 
